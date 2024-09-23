@@ -1,0 +1,54 @@
+.board-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(10, 30px);
+  grid-template-rows: repeat(20, 30px);
+  gap: 1px;
+  background-color: black;
+}
+
+.cell {
+  width: 30px;
+  height: 30px;
+  background-color: white;
+  border: 1px solid #333;
+}
+
+.cell.I {
+  background-color: cyan;
+}
+
+.cell.J {
+  background-color: blue;
+}
+
+.cell.L {
+  background-color: orange;
+}
+
+.cell.O {
+  background-color: yellow;
+}
+
+.cell.S {
+  background-color: green;
+}
+
+.cell.T {
+  background-color: purple;
+}
+
+.cell.Z {
+  background-color: red;
+}
+
+.cell.empty {
+  background-color: black;
+}
