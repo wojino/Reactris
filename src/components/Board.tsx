@@ -74,7 +74,7 @@ function Board() {
 					// while (!isColliding({ x: position.x, y: position.y + 1 }, piece, board)) {
 					// 	movePiece({ x: 0, y: 1 });
 					// }
-					lockPiece();
+					// lockPiece();
 					break;
 					
         default:
