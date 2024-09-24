@@ -6,7 +6,7 @@ import { TETROMINOES } from '../utils/tetrominoes';
 
 function Board() {
   const { board, updateBoard } = useBoard();
-  const { piece, position, isColliding, movePiece, rotatePieceCW, rotatePieceCCW, rotatePiece180, savePiece, resetPiece, holdCurrentPiece, holdPiece } = usePiece(board);
+  const { piece, position, isColliding, movePiece, rotatePieceCW, rotatePieceCCW, rotatePiece180, savePiece, resetPiece, holdCurrentPiece, holdPiece, setCanHold } = usePiece(board);
   const [isHardDrop, setIsHardDrop] = useState(false);
 
   const renderPieceOnBoard = useCallback(() => {
@@ -49,8 +49,9 @@ function Board() {
     updateBoard(newBoard);
     savePiece();
     resetPiece();
+    setCanHold(true);
     clearLines();
-  }, [renderPieceOnBoard, updateBoard, savePiece, resetPiece, clearLines]);
+  }, [renderPieceOnBoard, updateBoard, savePiece, resetPiece, clearLines, setCanHold]);
 
   const calculateDropDistance = useCallback(() => {
     let dropDistance = 0;

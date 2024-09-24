@@ -131,5 +131,5 @@ export const usePiece = (board: string[][]) => {
     setCanHold(false);
   };
 
-  return { piece, position, isColliding, movePiece, rotatePieceCW, rotatePieceCCW, rotatePiece180, savePiece, resetPiece, holdCurrentPiece, holdPiece };
+  return { piece, position, isColliding, movePiece, rotatePieceCW, rotatePieceCCW, rotatePiece180, savePiece, resetPiece, holdCurrentPiece, holdPiece, setCanHold};
 };
