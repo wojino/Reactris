@@ -19,7 +19,7 @@ const usePiece = (board: string[][]) => {
 
   const [piece, setPiece] = useState(TETROMINOES[currentBag[0]][0]);
   const [type, setType] = useState(currentBag[0]);
-  const [position, setPosition] = useState({ x: 3, y: 0 });
+  const [position, setPosition] = useState({ x: 3, y: 18 });
   const [rotation, setRotation] = useState(0);
 
   const [holdPiece, setHoldPiece] = useState<keyof typeof TETROMINOES | null>(
@@ -122,7 +122,7 @@ const usePiece = (board: string[][]) => {
       setHoldPiece(type);
       setType(temp);
       setPiece(TETROMINOES[temp][0]);
-      setPosition({ x: 3, y: 0 });
+      setPosition({ x: 3, y: 18 });
       setRotation(0);
     }
     setCanHold(false);
