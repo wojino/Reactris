@@ -20,6 +20,9 @@ export const usePiece = (board: string[][]) => {
   const [position, setPosition] = useState({ x: 3, y: 0 });
   const [rotation, setRotation] = useState(0);
 
+  const [holdPiece, setHoldPiece] = useState<keyof typeof TETROMINOES | null>(null);
+  const [canHold, setCanHold] = useState(true);
+
   const isColliding = (newPosition: { x: number, y: number }, newPiece: string[][], board: string[][]) => {
     for (let y = 0; y < newPiece.length; y++) {
       for (let x = 0; x < newPiece[y].length; x++) {
@@ -104,5 +107,22 @@ export const usePiece = (board: string[][]) => {
     getNextTetromino();
   };
 
-  return { piece, position, isColliding, movePiece, rotatePieceCW, rotatePieceCCW, rotatePiece180, savePiece, resetPiece };
+  const holdCurrentPiece = () => {
+    if (!canHold) return;
+
+    if (holdPiece === null) {
+      setHoldPiece(type);
+      resetPiece();
+    } else {
+      const temp = holdPiece;
+      setHoldPiece(type);
+      setType(temp);
+      setPiece(TETROMINOES[temp][0]);
+      setPosition({ x: 3, y: 0 });
+      setRotation(0);
+    }
+    setCanHold(false);
+  };
+
+  return { piece, position, isColliding, movePiece, rotatePieceCW, rotatePieceCCW, rotatePiece180, savePiece, resetPiece, holdCurrentPiece, holdPiece };
 };

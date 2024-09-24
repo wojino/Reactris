@@ -1,9 +1,13 @@
-.board-container {
+.game-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f0f0f0;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.board-container {
+  display: grid;
+  justify-content: center;
 }
 
 .board {
@@ -11,13 +15,26 @@
   grid-template-columns: repeat(10, 30px);
   grid-template-rows: repeat(20, 30px);
   gap: 1px;
-  background-color: black;
+}
+
+.hold-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hold {
+  display: grid;
+  /* 4x2 grid */
+  grid-template-columns: repeat(4, 30px);
+  grid-template-rows: repeat(2, 30px);
+  gap: 1px;
+  margin-top: 10px;
 }
 
 .cell {
   width: 30px;
   height: 30px;
-  background-color: white;
   border: 1px solid #333;
 }
 
