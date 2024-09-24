@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 const BOARD_WIDTH = 10;
 const BOARD_HEIGHT = 20;
 
 const createBoard = () => {
-  return Array.from({ length: BOARD_HEIGHT }, () => Array(BOARD_WIDTH).fill('0'));
+  return Array.from({ length: BOARD_HEIGHT }, () =>
+    Array(BOARD_WIDTH).fill("0"),
+  );
 };
 
 export const useBoard = () => {
