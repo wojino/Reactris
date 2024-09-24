@@ -27,7 +27,7 @@
   display: grid;
   /* 4x2 grid */
   grid-template-columns: repeat(4, 30px);
-  grid-template-rows: repeat(2, 30px);
+  grid-template-rows: repeat(4, 30px);
   gap: 1px;
   margin-top: 10px;
 }

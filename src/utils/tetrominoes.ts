@@ -1,4 +1,4 @@
-export const TETROMINOES = {
+const TETROMINOES = {
   I: [
     [
       ["0", "0", "0", "0"],
@@ -158,3 +158,5 @@ export const TETROMINOES = {
     ],
   ],
 };
+
+export default TETROMINOES;

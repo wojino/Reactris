@@ -9,7 +9,7 @@ const createBoard = () => {
   );
 };
 
-export const useBoard = () => {
+const useBoard = () => {
   const [board, setBoard] = useState<string[][]>(createBoard());
 
   const updateBoard = (newBoard: string[][]) => {
@@ -22,3 +22,5 @@ export const useBoard = () => {
 
   return { board, updateBoard, resetBoard };
 };
+
+export default useBoard;

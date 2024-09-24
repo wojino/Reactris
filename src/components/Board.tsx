@@ -1,23 +1,22 @@
 import React, { useEffect, useCallback, useState } from "react";
-import { useBoard } from "../hooks/useBoard";
-import { usePiece } from "../hooks/usePiece";
+import useBoard from "../hooks/useBoard";
+import usePiece from "../hooks/usePiece";
 import "./Board.css";
-import { TETROMINOES } from "../utils/tetrominoes";
+import TETROMINOES from "../utils/tetrominoes";
 
 function Board() {
   const { board, updateBoard } = useBoard();
   const {
     piece,
     position,
+    holdPiece,
     isColliding,
     movePiece,
     rotatePieceCW,
     rotatePieceCCW,
     rotatePiece180,
-    savePiece,
     resetPiece,
     holdCurrentPiece,
-    holdPiece,
     setCanHold,
   } = usePiece(board);
   const [isHardDrop, setIsHardDrop] = useState(false);
@@ -37,15 +36,16 @@ function Board() {
   const renderHoldBoard = useCallback(() => {
     const grid = Array(4)
       .fill(null)
-      .map(() => Array(2).fill("0"));
+      .map(() => Array(4).fill("0"));
     if (!holdPiece) {
       return grid;
     }
 
     const pieceShape = TETROMINOES[holdPiece][0];
-    for (let y = 0; y < Math.min(2, pieceShape.length); y++) {
-      for (let x = 0; x < pieceShape[y].length; x++) {
-        grid[x][y] = pieceShape[y][x];
+    for (let y = 0; y < pieceShape.length; y += 1) {
+      for (let x = 0; x < pieceShape[y].length; x += 1) {
+        console.log(y, x);
+        grid[y][x] = pieceShape[y][x];
       }
     }
 
@@ -60,6 +60,16 @@ function Board() {
     );
     updateBoard([...emptyRows, ...newBoard]);
   }, [board, updateBoard]);
+
+  const savePiece = useCallback(() => {
+    for (let y = 0; y < piece.length; y += 1) {
+      for (let x = 0; x < piece[y].length; x += 1) {
+        if (piece[y][x] !== "0") {
+          board[position.y + y][position.x + x] = piece[y][x];
+        }
+      }
+    }
+  }, [board, piece, position]);
 
   const lockPiece = useCallback(() => {
     const newBoard = renderPieceOnBoard();
@@ -80,13 +90,9 @@ function Board() {
   const calculateDropDistance = useCallback(() => {
     let dropDistance = 0;
     while (
-      !isColliding(
-        { x: position.x, y: position.y + dropDistance + 1 },
-        piece,
-        board,
-      )
+      !isColliding({ x: position.x, y: position.y + dropDistance + 1 }, piece)
     ) {
-      dropDistance++;
+      dropDistance += 1;
     }
     return dropDistance;
   }, [isColliding, position, piece, board]);
@@ -110,7 +116,7 @@ function Board() {
           break;
 
         case "ArrowDown":
-          if (isColliding({ x: position.x, y: position.y + 1 }, piece, board)) {
+          if (isColliding({ x: position.x, y: position.y + 1 }, piece)) {
             lockPiece();
           } else {
             movePiece({ x: 0, y: 1 });
@@ -176,7 +182,7 @@ function Board() {
           {updatedBoard.map((row, y) =>
             row.map((cell, x) => (
               <div
-                key={`${x}-${y}`}
+                key={JSON.stringify([x, y])}
                 className={`cell ${cell === "0" ? "empty" : cell}`}
               />
             )),
@@ -185,18 +191,15 @@ function Board() {
       </div>
 
       <div className="hold-container">
-        <h3>Hold</h3>
         <div className="hold">
-          {holdBoard.map((row, y) => (
-            <div key={y} className="hold-row">
-              {row.map((cell, x) => (
-                <div
-                  key={x}
-                  className={`cell ${cell === "0" ? "empty" : cell}`}
-                />
-              ))}
-            </div>
-          ))}
+          {holdBoard.map((row, y) =>
+            row.map((cell, x) => (
+              <div
+                key={JSON.stringify([x, y])}
+                className={`cell ${cell === "0" ? "empty" : cell}`}
+              />
+            )),
+          )}
         </div>
       </div>
     </div>

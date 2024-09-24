@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
-import { TETROMINOES } from "../utils/tetrominoes";
+import TETROMINOES from "../utils/tetrominoes";
 
 const generate7Bag = () => {
   const tetrominoKeys = Object.keys(TETROMINOES) as Array<
     keyof typeof TETROMINOES
   >;
   const bag = [...tetrominoKeys];
-  for (let i = bag.length - 1; i > 0; i--) {
+  for (let i = bag.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1));
     [bag[i], bag[j]] = [bag[j], bag[i]];
   }
   return bag;
 };
 
-export const usePiece = (board: string[][]) => {
+const usePiece = (board: string[][]) => {
   const [currentBag, setCurrentBag] = useState(generate7Bag());
   const [bagIndex, setBagIndex] = useState(0);
 
@@ -30,10 +30,9 @@ export const usePiece = (board: string[][]) => {
   const isColliding = (
     newPosition: { x: number; y: number },
     newPiece: string[][],
-    board: string[][],
   ) => {
-    for (let y = 0; y < newPiece.length; y++) {
-      for (let x = 0; x < newPiece[y].length; x++) {
+    for (let y = 0; y < newPiece.length; y += 1) {
+      for (let x = 0; x < newPiece[y].length; x += 1) {
         if (newPiece[y][x] !== "0") {
           const newX = newPosition.x + x;
           const newY = newPosition.y + y;
@@ -75,7 +74,7 @@ export const usePiece = (board: string[][]) => {
 
   const movePiece = (dir: { x: number; y: number }) => {
     const newPosition = { x: position.x + dir.x, y: position.y + dir.y };
-    if (!isColliding(newPosition, piece, board)) {
+    if (!isColliding(newPosition, piece)) {
       setPosition(newPosition);
     }
   };
@@ -83,7 +82,7 @@ export const usePiece = (board: string[][]) => {
   const rotatePieceCW = () => {
     const newRotation = (rotation + 1) % TETROMINOES[type].length;
     const newPiece = TETROMINOES[type][newRotation];
-    if (!isColliding(position, newPiece, board)) {
+    if (!isColliding(position, newPiece)) {
       setRotation(newRotation);
       setPiece(newPiece);
     }
@@ -93,7 +92,7 @@ export const usePiece = (board: string[][]) => {
     const newRotation =
       (rotation - 1 + TETROMINOES[type].length) % TETROMINOES[type].length;
     const newPiece = TETROMINOES[type][newRotation];
-    if (!isColliding(position, newPiece, board)) {
+    if (!isColliding(position, newPiece)) {
       setRotation(newRotation);
       setPiece(newPiece);
     }
@@ -102,19 +101,9 @@ export const usePiece = (board: string[][]) => {
   const rotatePiece180 = () => {
     const newRotation = (rotation + 2) % TETROMINOES[type].length;
     const newPiece = TETROMINOES[type][newRotation];
-    if (!isColliding(position, newPiece, board)) {
+    if (!isColliding(position, newPiece)) {
       setRotation(newRotation);
       setPiece(newPiece);
-    }
-  };
-
-  const savePiece = () => {
-    for (let y = 0; y < piece.length; y++) {
-      for (let x = 0; x < piece[y].length; x++) {
-        if (piece[y][x] !== "0") {
-          board[position.y + y][position.x + x] = piece[y][x];
-        }
-      }
     }
   };
 
@@ -147,10 +136,11 @@ export const usePiece = (board: string[][]) => {
     rotatePieceCW,
     rotatePieceCCW,
     rotatePiece180,
-    savePiece,
     resetPiece,
     holdCurrentPiece,
     holdPiece,
     setCanHold,
   };
 };
+
+export default usePiece;
