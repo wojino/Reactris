@@ -68,7 +68,7 @@ const usePiece = (board: string[][]) => {
     const nextTetromino = currentBag[bagIndex];
     setType(nextTetromino);
     setPiece(TETROMINOES[nextTetromino][0]);
-    setPosition({ x: 3, y: 0 });
+    setPosition({ x: 3, y: 18 });
     setRotation(0);
   }, [bagIndex, currentBag]);
 

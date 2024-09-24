@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const BOARD_WIDTH = 10;
-const BOARD_HEIGHT = 20;
+const BOARD_HEIGHT = 40;
 
 const createBoard = () => {
   return Array.from({ length: BOARD_HEIGHT }, () =>

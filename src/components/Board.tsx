@@ -178,14 +178,16 @@ function Board() {
     <div className="game-container">
       <div className="board-container">
         <div className="board">
-          {updatedBoard.map((row, y) =>
-            row.map((cell, x) => (
-              <div
-                key={JSON.stringify([x, y])}
-                className={`cell ${cell === "0" ? "empty" : cell}`}
-              />
-            )),
-          )}
+          {updatedBoard
+            .slice(-22)
+            .map((row, y) =>
+              row.map((cell, x) => (
+                <div
+                  key={JSON.stringify([x, y])}
+                  className={`cell ${cell === "0" ? "empty" : cell}`}
+                />
+              )),
+            )}
         </div>
       </div>
 

@@ -13,7 +13,7 @@
 .board {
   display: grid;
   grid-template-columns: repeat(10, 30px);
-  grid-template-rows: repeat(20, 30px);
+  grid-template-rows: repeat(22, 30px);
   gap: 1px;
 }
 
