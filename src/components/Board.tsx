@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { useBoard } from '../hooks/useBoard';
 import { usePiece } from '../hooks/usePiece';
 import './Board.css';
@@ -6,6 +6,7 @@ import './Board.css';
 function Board() {
   const { board, updateBoard } = useBoard();
   const { piece, position, isColliding, movePiece, rotatePieceCW, rotatePieceCCW, rotatePiece180, resetPiece } = usePiece(board);
+  const [isHardDrop, setIsHardDrop] = useState(false);
 
   const renderPieceOnBoard = useCallback(() => {
     const newBoard = board.map(row => [...row]);
@@ -33,6 +34,21 @@ function Board() {
     resetPiece();
     clearLines();
   }, [renderPieceOnBoard, updateBoard, resetPiece, clearLines]);
+
+  const calculateDropDistance = useCallback(() => {
+    let dropDistance = 0;
+    while (!isColliding({ x: position.x, y: position.y + dropDistance + 1 }, piece, board)) {
+      dropDistance++;
+    }
+    return dropDistance;
+  }, [isColliding, position, piece, board]);
+
+  useEffect(() => {
+    if (isHardDrop) {
+      lockPiece();
+      setIsHardDrop(false);
+    }
+  }, [isHardDrop, lockPiece]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -70,12 +86,11 @@ function Board() {
           rotatePiece180();
           break;
 
-				case ' ':
-					// while (!isColliding({ x: position.x, y: position.y + 1 }, piece, board)) {
-					// 	movePiece({ x: 0, y: 1 });
-					// }
-					// lockPiece();
-					break;
+        case ' ':
+          const dropDistance = calculateDropDistance();
+          movePiece({ x: 0, y: dropDistance });
+          setIsHardDrop(true);
+          break;
 					
         default:
           break;
@@ -84,7 +99,7 @@ function Board() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [movePiece, rotatePieceCW, rotatePieceCCW, rotatePiece180, lockPiece, isColliding, piece, board, position]);
+  }, [movePiece, rotatePieceCW, rotatePieceCCW, rotatePiece180, lockPiece, isColliding, piece, board, position, calculateDropDistance]);
 
   const updatedBoard = renderPieceOnBoard();
 
