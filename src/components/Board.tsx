@@ -44,7 +44,6 @@ function Board() {
     const pieceShape = TETROMINOES[holdPiece][0];
     for (let y = 0; y < pieceShape.length; y += 1) {
       for (let x = 0; x < pieceShape[y].length; x += 1) {
-        console.log(y, x);
         grid[y][x] = pieceShape[y][x];
       }
     }
