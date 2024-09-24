@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { TETROMINOES } from '../utils/tetrominoes';
 
 const generate7Bag = () => {
@@ -15,8 +15,8 @@ export const usePiece = (board: string[][]) => {
   const [currentBag, setCurrentBag] = useState(generate7Bag());
   const [bagIndex, setBagIndex] = useState(0);
   
-  const [piece, setPiece] = useState(TETROMINOES[currentBag[bagIndex]][0]);
-  const [type, setType] = useState(currentBag[bagIndex]);
+  const [piece, setPiece] = useState(TETROMINOES[currentBag[0]][0]);
+  const [type, setType] = useState(currentBag[0]);
   const [position, setPosition] = useState({ x: 3, y: 0 });
   const [rotation, setRotation] = useState(0);
 
@@ -44,20 +44,27 @@ export const usePiece = (board: string[][]) => {
   };
   
   const getNextTetromino = () => {
-    setBagIndex((prevIndex) => {
-      const nextIndex = prevIndex === currentBag.length - 1 ? 0 : prevIndex + 1;
-      if (nextIndex === 0) {
-        setCurrentBag(generate7Bag());
-      }
-      return nextIndex;
-    });
+    setBagIndex(prevIndex => {
+      const nextIndex = prevIndex + 1;
 
+      if (nextIndex >= currentBag.length) {
+        const newBag = generate7Bag();
+        setCurrentBag(newBag);
+        setBagIndex(0);
+        return 0;
+      } else {
+        return nextIndex;
+      }
+    });
+  };
+
+  useEffect(() => {
     const nextTetromino = currentBag[bagIndex];
     setType(nextTetromino);
     setPiece(TETROMINOES[nextTetromino][0]);
     setPosition({ x: 3, y: 0 });
     setRotation(0);
-  };
+  }, [bagIndex, currentBag]);
 
   const movePiece = (dir: { x: number; y: number }) => {
     const newPosition = { x: position.x + dir.x, y: position.y + dir.y };
