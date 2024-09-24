@@ -1,11 +1,22 @@
 import { useState } from 'react';
-import { TETROMINOES, randomTetromino } from '../utils/tetrominoes';
+import { TETROMINOES } from '../utils/tetrominoes';
+
+const generate7Bag = () => {
+  const tetrominoKeys = Object.keys(TETROMINOES) as Array<keyof typeof TETROMINOES>;
+  const bag = [...tetrominoKeys];
+  for (let i = bag.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [bag[i], bag[j]] = [bag[j], bag[i]];
+  }
+  return bag;
+};
 
 export const usePiece = (board: string[][]) => {
-  const initialPiece = randomTetromino();
+  const [currentBag, setCurrentBag] = useState(generate7Bag());
+  const [bagIndex, setBagIndex] = useState(0);
   
-  const [piece, setPiece] = useState(initialPiece.piece);
-  const [type, setType] = useState<keyof typeof TETROMINOES>(initialPiece.type);
+  const [piece, setPiece] = useState(TETROMINOES[currentBag[bagIndex]][0]);
+  const [type, setType] = useState(currentBag[bagIndex]);
   const [position, setPosition] = useState({ x: 3, y: 0 });
   const [rotation, setRotation] = useState(0);
 
@@ -29,9 +40,22 @@ export const usePiece = (board: string[][]) => {
     return false;
   };
   
+  const getNextTetromino = () => {
+    setBagIndex((prevIndex) => {
+      const nextIndex = prevIndex === currentBag.length - 1 ? 0 : prevIndex + 1;
+      if (nextIndex === 0) {
+        setCurrentBag(generate7Bag());
+      }
+      return nextIndex;
+    });
 
+    const nextTetromino = currentBag[bagIndex];
+    setType(nextTetromino);
+    setPiece(TETROMINOES[nextTetromino][0]);
+    setPosition({ x: 3, y: 0 });
+    setRotation(0);
+  };
 
-  // 블록을 이동시키는 함수
   const movePiece = (dir: { x: number; y: number }) => {
     const newPosition = { x: position.x + dir.x, y: position.y + dir.y };
     if (!isColliding(newPosition, piece, board)) {
@@ -65,9 +89,8 @@ export const usePiece = (board: string[][]) => {
       setPiece(newPiece);
     }
   };
-  
-  const resetPiece = () => {
-    // save the current piece to the board
+
+  const savePiece = () => {
     for (let y = 0; y < piece.length; y++) {
       for (let x = 0; x < piece[y].length; x++) {
         if (piece[y][x] !== '0') {
@@ -75,13 +98,11 @@ export const usePiece = (board: string[][]) => {
         }
       }
     }
-
-    const newTetromino = randomTetromino();
-    setType(newTetromino.type);
-    setPiece(newTetromino.piece);
-    setPosition({ x: 3, y: 0 });
-    setRotation(0);
+  };
+  
+  const resetPiece = () => {
+    getNextTetromino();
   };
 
-  return { piece, position, isColliding, movePiece, rotatePieceCW, rotatePieceCCW, rotatePiece180, resetPiece };
+  return { piece, position, isColliding, movePiece, rotatePieceCW, rotatePieceCCW, rotatePiece180, savePiece, resetPiece };
 };

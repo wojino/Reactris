@@ -123,13 +123,3 @@ export const TETROMINOES = {
     ['Z', '0', '0']
   ]]
 };
-
-export const randomTetromino = () => {
-  const tetrominos: Array<keyof typeof TETROMINOES> = ['I', 'J', 'L', 'O', 'S', 'T', 'Z'];
-  const randTetromino = tetrominos[Math.floor(Math.random() * tetrominos.length)];
-  
-  return {
-    type: randTetromino,
-    piece: TETROMINOES[randTetromino][0],
-  };
-};

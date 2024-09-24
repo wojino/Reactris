@@ -5,7 +5,7 @@ import './Board.css';
 
 function Board() {
   const { board, updateBoard } = useBoard();
-  const { piece, position, isColliding, movePiece, rotatePieceCW, rotatePieceCCW, rotatePiece180, resetPiece } = usePiece(board);
+  const { piece, position, isColliding, movePiece, rotatePieceCW, rotatePieceCCW, rotatePiece180, savePiece, resetPiece } = usePiece(board);
   const [isHardDrop, setIsHardDrop] = useState(false);
 
   const renderPieceOnBoard = useCallback(() => {
@@ -31,9 +31,10 @@ function Board() {
   const lockPiece = useCallback(() => {
     const newBoard = renderPieceOnBoard();
     updateBoard(newBoard);
+    savePiece();
     resetPiece();
     clearLines();
-  }, [renderPieceOnBoard, updateBoard, resetPiece, clearLines]);
+  }, [renderPieceOnBoard, updateBoard, savePiece, resetPiece, clearLines]);
 
   const calculateDropDistance = useCallback(() => {
     let dropDistance = 0;
@@ -86,6 +87,11 @@ function Board() {
           rotatePiece180();
           break;
 
+        case 'c':
+        case 'C':
+          resetPiece();
+          break;
+
         case ' ':
           const dropDistance = calculateDropDistance();
           movePiece({ x: 0, y: dropDistance });
@@ -99,7 +105,7 @@ function Board() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [movePiece, rotatePieceCW, rotatePieceCCW, rotatePiece180, lockPiece, isColliding, piece, board, position, calculateDropDistance]);
+  }, [movePiece, rotatePieceCW, rotatePieceCCW, rotatePiece180, lockPiece, isColliding, piece, board, position, calculateDropDistance, resetPiece]);
 
   const updatedBoard = renderPieceOnBoard();
 
