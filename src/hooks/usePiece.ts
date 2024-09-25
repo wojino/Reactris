@@ -15,6 +15,7 @@ const generate7Bag = () => {
 
 const usePiece = (board: string[][]) => {
   const [currentBag, setCurrentBag] = useState(generate7Bag());
+  const [nextBag, setNextBag] = useState(generate7Bag());
   const [bagIndex, setBagIndex] = useState(0);
 
   const [piece, setPiece] = useState(TETROMINOES[currentBag[0]][0]);
@@ -55,8 +56,8 @@ const usePiece = (board: string[][]) => {
       const nextIndex = prevIndex + 1;
 
       if (nextIndex >= currentBag.length) {
-        const newBag = generate7Bag();
-        setCurrentBag(newBag);
+        setCurrentBag(nextBag);
+        setNextBag(generate7Bag());
         setBagIndex(0);
         return 0;
       }
@@ -143,6 +144,9 @@ const usePiece = (board: string[][]) => {
     holdCurrentPiece,
     holdPiece,
     setCanHold,
+    currentBag,
+    nextBag,
+    bagIndex,
   };
 };
 

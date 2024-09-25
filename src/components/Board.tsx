@@ -18,6 +18,9 @@ function Board() {
     resetPiece,
     holdCurrentPiece,
     setCanHold,
+    currentBag,
+    nextBag,
+    bagIndex,
   } = usePiece(board);
   const [isHardDrop, setIsHardDrop] = useState(false);
 
@@ -50,6 +53,25 @@ function Board() {
 
     return grid;
   }, [holdPiece]);
+
+  const renderNextBoard = useCallback(() => {
+    const nextPieces = [...currentBag.slice(bagIndex + 1), ...nextBag];
+
+    const grid = Array(20)
+      .fill(null)
+      .map(() => Array(4).fill("0"));
+
+    for (let i = 0; i < 5; i += 1) {
+      const pieceShape = TETROMINOES[nextPieces[i]][0];
+      for (let y = 0; y < pieceShape.length; y += 1) {
+        for (let x = 0; x < pieceShape[y].length; x += 1) {
+          grid[y + i * 4][x] = pieceShape[y][x];
+        }
+      }
+    }
+
+    return grid;
+  }, [currentBag, nextBag, bagIndex]);
 
   const clearLines = useCallback(() => {
     const newBoard = board.filter((row) => row.some((cell) => cell === "0"));
@@ -115,10 +137,8 @@ function Board() {
           break;
 
         case "ArrowDown":
-          if (isColliding({ x: position.x, y: position.y + 1 }, piece)) {
+          if (!movePiece({ x: 0, y: 1 })) {
             lockPiece();
-          } else {
-            movePiece({ x: 0, y: 1 });
           }
           break;
 
@@ -173,9 +193,23 @@ function Board() {
 
   const updatedBoard = renderPieceOnBoard();
   const holdBoard = renderHoldBoard();
+  const nextBoard = renderNextBoard();
 
   return (
     <div className="game-container">
+      <div className="hold-container">
+        <div className="hold">
+          {holdBoard.map((row, y) =>
+            row.map((cell, x) => (
+              <div
+                key={JSON.stringify([x, y])}
+                className={`cell ${cell === "0" ? "empty" : cell}`}
+              />
+            )),
+          )}
+        </div>
+      </div>
+
       <div className="board-container">
         <div className="board">
           {updatedBoard
@@ -191,9 +225,9 @@ function Board() {
         </div>
       </div>
 
-      <div className="hold-container">
-        <div className="hold">
-          {holdBoard.map((row, y) =>
+      <div className="next-container">
+        <div className="next">
+          {nextBoard.map((row, y) =>
             row.map((cell, x) => (
               <div
                 key={JSON.stringify([x, y])}
