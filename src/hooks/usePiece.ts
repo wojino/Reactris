@@ -76,11 +76,13 @@ const usePiece = (board: string[][]) => {
     const newPosition = { x: position.x + dir.x, y: position.y + dir.y };
     if (!isColliding(newPosition, piece)) {
       setPosition(newPosition);
+      return true;
     }
+    return false;
   };
 
   const movePiece = (dir: { x: number; y: number }) => {
-    attemptMove(dir);
+    return attemptMove(dir);
   };
 
   const attemptRotate = (newRotation: number) => {
@@ -88,22 +90,24 @@ const usePiece = (board: string[][]) => {
     if (!isColliding(position, newPiece)) {
       setRotation(newRotation);
       setPiece(newPiece);
+      return true;
     }
+    return false;
   };
 
   const rotatePieceCW = () => {
     const newRotation = (rotation + 1) % 4;
-    attemptRotate(newRotation);
+    return attemptRotate(newRotation);
   };
 
   const rotatePieceCCW = () => {
     const newRotation = (rotation + 3) % 4;
-    attemptRotate(newRotation);
+    return attemptRotate(newRotation);
   };
 
   const rotatePiece180 = () => {
     const newRotation = (rotation + 2) % 4;
-    attemptRotate(newRotation);
+    return attemptRotate(newRotation);
   };
 
   const resetPiece = () => {
