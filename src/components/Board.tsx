@@ -53,7 +53,7 @@ function Board() {
 
   const clearLines = useCallback(() => {
     const newBoard = board.filter((row) => row.some((cell) => cell === "0"));
-    const clearedLines = 20 - newBoard.length;
+    const clearedLines = 40 - newBoard.length;
     const emptyRows = Array.from({ length: clearedLines }, () =>
       Array(10).fill("0"),
     );
