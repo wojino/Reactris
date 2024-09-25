@@ -92,18 +92,17 @@ const usePiece = (board: string[][]) => {
   };
 
   const rotatePieceCW = () => {
-    const newRotation = (rotation + 1) % TETROMINOES[type].length;
+    const newRotation = (rotation + 1) % 4;
     attemptRotate(newRotation);
   };
 
   const rotatePieceCCW = () => {
-    const newRotation =
-      (rotation - 1 + TETROMINOES[type].length) % TETROMINOES[type].length;
+    const newRotation = (rotation + 3) % 4;
     attemptRotate(newRotation);
   };
 
   const rotatePiece180 = () => {
-    const newRotation = (rotation + 2) % TETROMINOES[type].length;
+    const newRotation = (rotation + 2) % 4;
     attemptRotate(newRotation);
   };
 
