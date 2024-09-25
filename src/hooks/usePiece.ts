@@ -72,39 +72,39 @@ const usePiece = (board: string[][]) => {
     setRotation(0);
   }, [bagIndex, currentBag]);
 
-  const movePiece = (dir: { x: number; y: number }) => {
+  const attemptMove = (dir: { x: number; y: number }) => {
     const newPosition = { x: position.x + dir.x, y: position.y + dir.y };
     if (!isColliding(newPosition, piece)) {
       setPosition(newPosition);
     }
   };
 
-  const rotatePieceCW = () => {
-    const newRotation = (rotation + 1) % TETROMINOES[type].length;
+  const movePiece = (dir: { x: number; y: number }) => {
+    attemptMove(dir);
+  };
+
+  const attemptRotate = (newRotation: number) => {
     const newPiece = TETROMINOES[type][newRotation];
     if (!isColliding(position, newPiece)) {
       setRotation(newRotation);
       setPiece(newPiece);
     }
+  };
+
+  const rotatePieceCW = () => {
+    const newRotation = (rotation + 1) % TETROMINOES[type].length;
+    attemptRotate(newRotation);
   };
 
   const rotatePieceCCW = () => {
     const newRotation =
       (rotation - 1 + TETROMINOES[type].length) % TETROMINOES[type].length;
-    const newPiece = TETROMINOES[type][newRotation];
-    if (!isColliding(position, newPiece)) {
-      setRotation(newRotation);
-      setPiece(newPiece);
-    }
+    attemptRotate(newRotation);
   };
 
   const rotatePiece180 = () => {
     const newRotation = (rotation + 2) % TETROMINOES[type].length;
-    const newPiece = TETROMINOES[type][newRotation];
-    if (!isColliding(position, newPiece)) {
-      setRotation(newRotation);
-      setPiece(newPiece);
-    }
+    attemptRotate(newRotation);
   };
 
   const resetPiece = () => {
