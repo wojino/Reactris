@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import TETROMINOES from "../utils/tetrominoes";
+import WALL_KICK_TABLE from "../utils/wallKickTable";
 
 const generate7Bag = () => {
   const tetrominoKeys = Object.keys(TETROMINOES) as Array<
@@ -88,10 +89,25 @@ const usePiece = (board: string[][]) => {
 
   const attemptRotate = (newRotation: number) => {
     const newPiece = TETROMINOES[type][newRotation];
-    if (!isColliding(position, newPiece)) {
-      setRotation(newRotation);
-      setPiece(newPiece);
-      return true;
+
+    const kickTable = type === "I" ? WALL_KICK_TABLE.I : WALL_KICK_TABLE.JLSTZ;
+    const rotationKey = `${rotation}>>${newRotation}` as keyof typeof kickTable;
+
+    const kickOffsets = kickTable[rotationKey];
+
+    for (let i = 0; i < kickOffsets.length; i += 1) {
+      const kickOffset = kickOffsets[i];
+      const newPosition = {
+        x: position.x + kickOffset.x,
+        y: position.y - kickOffset.y,
+      };
+
+      if (!isColliding(newPosition, newPiece)) {
+        setPosition(newPosition);
+        setRotation(newRotation);
+        setPiece(newPiece);
+        return true;
+      }
     }
     return false;
   };
