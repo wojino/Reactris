@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Reactris/static/css/main.390e191f.css",
+    "main.js": "/Reactris/static/js/main.a8ad486a.js",
+    "index.html": "/Reactris/index.html",
+    "main.390e191f.css.map": "/Reactris/static/css/main.390e191f.css.map",
+    "main.a8ad486a.js.map": "/Reactris/static/js/main.a8ad486a.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.390e191f.css",
+    "static/js/main.a8ad486a.js"
+  ]
+}
